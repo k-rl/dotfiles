@@ -30,6 +30,7 @@ COMPLETION_WAITING_DOTS="true"
 plugins=(git vi-mode)
 
 source $ZSH/oh-my-zsh.sh
+source $HOME/.config/secrets.sh
 
 # User configuration
 
@@ -53,6 +54,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias clang=clang-20
+alias uvr="uv run"
+alias py="uv run python"
 
 # Function to lazy load slow running init scripts.
 lazy_load() {
