@@ -1,2 +1,3 @@
 # dotfiles
-Clone this repo then run setup.sh when in the repo's parent directory.
+Run this from the home dir to get setup:
+sh -c "$(curl -fsLS get.chezmoi.io/lb)" -- init --apply "k-rl"
