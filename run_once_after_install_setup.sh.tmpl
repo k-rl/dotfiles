@@ -1,0 +1,63 @@
+#!/bin/zsh
+
+# Install packages.
+{{ if eq .chezmoi.os "linux" -}}
+    sudo apt-get update -y
+    sudo apt install -y cmake
+    sudo apt-get install -y direnv
+    sudo apt install -y git
+    sudo apt install -y libudev-dev
+    sudo apt install -y pkg-config
+    sudo apt-get install -y tmate
+    sudo apt-get install -y tmux
+    sudo apt-get install -y zip
+    sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+    wget -O nvim.tar.gz https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+{{ else if eq .chezmoi.os "darwin" -}}
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    brew install wget
+    brew install tmux
+    brew install tmate
+    brew install direnv
+    brew install font-fira-code
+    wget -O nvim.tar.gz https://github.com/neovim/neovim/releases/latest/download/nvim-macos-arm64.tar.gz
+{{ end -}}
+
+# Install neovim.
+rm -rf "$HOME/.local/bin/nvim"
+tar xzvf nvim.tar.gz
+rm nvim.tar.gz
+mv nvim-* "$HOME/.local/bin/nvim"
+
+# Install ohmyzsh.
+sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --keep-zshrc --unattended"
+ln -s "$PWD/catppuccin.zsh-theme" "$ZSH/custom/themes/catppuccin.zsh-theme"
+
+# Install uv (python).
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Devtools
+uv tool install pre-commit@latest --with pre-commit-uv
+uv tool install ruff@latest
+
+# Install node.
+NVM_DIR="$HOME/local/.bin/nvm"
+mkdir -p "$NVM_DIR"
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+\. "$NVM_DIR/nvm.sh"
+nvm install 22
+# Install node tools.
+npm install -g @anthropic-ai/claude-code
+
+
+# Install rust.
+export RUSTUP_HOME="$HOME/.local/bin/rustup"
+export CARGO_HOME="$HOME/.local/bin/cargo"
+curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | bash -s -- -y
+
+# Install rust tools.
+# Embedded development tools.
+cargo install espup esp-generate espflash probe-rs --locked
+espup install
+
+source ~/.zshrc
