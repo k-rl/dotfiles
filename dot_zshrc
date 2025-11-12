@@ -1,4 +1,4 @@
-export ZSH="$HOME/local/.local/bin/oh-my-zsh"
+export ZSH="$HOME/.local/bin/oh-my-zsh"
 ZSH_THEME="catppuccin"
 # Auto-update oh my zsh
 zstyle ':omz:update' mode auto
