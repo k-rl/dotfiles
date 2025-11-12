@@ -21,9 +21,10 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 opt.rtp:prepend(lazypath)
 
-vim.opt.clipboard = "unnamedplus"
-if vim.fn.has("wsl") then
-  vim.g.clipboard = {
+-- Make sure clipboard uses the system clipboard.
+opt.clipboard = "unnamedplus"
+if fn.has("wsl") == 1 then
+  g.clipboard = {
     name = "WslClipboard",
     copy = {
       ["+"] = "clip.exe",
@@ -39,13 +40,18 @@ end
 
 -- Make sure to setup `mapleader` and `maplocalleader` before
 -- loading lazy.nvim so that mappings are correct.
--- This is also a good place to setup other settings (vim.opt)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
+    {
+        "chomosuke/typst-preview.nvim",
+        ft = "typst",
+        version = "1.*",
+        opts = {},
+    },
     {'hrsh7th/cmp-nvim-lsp'},
     {'hrsh7th/nvim-cmp'},
     {"williamboman/mason.nvim", commit = "4da89f3"},
@@ -158,12 +164,29 @@ require('mason-lspconfig').setup({
       'clangd',
       'pyright',
       'ruff',
+      'tinymist',
       'vtsls',
   },
 })
 
--- require('lspconfig').gleam.setup({})
 -- require('lspconfig').rust_analyzer.setup({})
+
+vim.lsp.config("tinymist", {
+                formatterMode = "typstyle",
+                exportPdf = "onType",
+                semanticTokens = "disable"
+        }
+)
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "typst",
+  callback = function(args)
+    if vim.bo[args.buf].buftype ~= "" then return end
+    if vim.b[args.buf].typst_preview_started then return end
+    vim.b[args.buf].typst_preview_started = true
+    vim.cmd("TypstPreview")
+  end,
+})
 
 local cmp = require('cmp')
 
@@ -194,6 +217,10 @@ cmp.setup({
     end),
   }),
 })
+
+-- Go to center of page after page up/down.
+vim.keymap.set("n", "<C-d>", "<C-d>zz", {noremap = true})
+vim.keymap.set("n", "<C-u>", "<C-u>zz", {noremap = true})
 
 -- File navigation.
 local builtin = require('telescope.builtin')
