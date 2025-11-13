@@ -85,6 +85,8 @@ espup install
 rm "$HOME/export-esp.sh"
 
 # Install tmux package manager.
-TPM_DIR="$HOME/.config/tmux/plugins/tpm"
-rm -rf "$TPM_DIR"
-git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
+TMUX_PLUGINS_DIR="$HOME/.config/tmux/plugins"
+rm -rf TMUX_PLUGINS_DIR
+git clone -b latest https://github.com/catppuccin/tmux.git "$TMUX_PLUGINS_DIR/catppuccin/tmux"
+git clone https://github.com/tmux-plugins/tmux-battery.git "$TMUX_PLUGINS_DIR/tmux-plugins/tmux-battery"
+git clone https://github.com/tmux-plugins/tmux-cpu.git "$TMUX_PLUGINS_DIR/tmux-plugins/tmux-cpu"
