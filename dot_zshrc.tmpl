@@ -36,6 +36,12 @@ lazy_load() {
     }
 }
 
+# Python init.
+export IPYTHONDIR="$HOME/.config/ipython"
+export JUPYTER_CONFIG_DIR="$HOME/.config/jupyter"
+export JUPYTER_DATA_DIR="$HOME/.local/share/jupyter"
+export JUPYTER_RUNTIME_DIR="$HOME/.local/state/jupyter"
+
 # Rust init.
 export CARGO_HOME="$HOME/.local/bin/cargo"
 export RUSTUP_HOME="$HOME/.local/bin/rustup"
@@ -48,6 +54,7 @@ export PATH=$(echo $RUSTUP_HOME/toolchains/esp/xtensa-esp-elf/*/xtensa-esp-elf/b
 export NVM_DIR="$HOME/.local/bin/nvm"
 export PATH=$(echo $NVM_DIR/versions/node/*/bin(N[-1])):"$PATH"
 lazy_load nvm "source $NVM_DIR/nvm.sh; source $NVM_DIR/bash_completion"
+export NODE_REPL_HISTORY="$HOME/.local/state/node/repl_history"
 
 # Vim init.
 alias vim=nvim

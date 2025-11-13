@@ -37,6 +37,22 @@ sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools
 # Install uv (python).
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
+# Install a global python environment.
+uv tool install jupyter-core \
+  --with-executables-from ipython \
+  --with jupyterlab \
+  --with magnify \
+  --with matplotlib \
+  --with napari \
+  --with numpy \
+  --with pandas \
+  --with pyqt5 \
+  --with scikit-learn \
+  --with scipy \
+  --with seaborn \
+  --with xarray \
+  --with zarr
+
 # Devtools
 uv tool install pre-commit@latest --with pre-commit-uv
 uv tool install ruff@latest
@@ -65,3 +81,4 @@ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | bash -s -- -y
 # Embedded development tools.
 cargo install espup esp-generate espflash probe-rs --locked
 espup install
+rm "$HOME/export-esp.sh"
