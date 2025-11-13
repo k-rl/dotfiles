@@ -11,14 +11,37 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
-plugins=(git vi-mode)
+plugins=(vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
-# Aliases
+#======Aliases======#
+# General
 alias clang=clang-20
+
+# Git
+alias ga="git add"
+gc() {
+    msg=${(j: :)@[2,-1]}
+    git commit -m msg
+    git push
+}
+alias gch="git checkout"
+alias gcl="git clone"
+alias gd="git diff"
+alias gl="git log"
+alias gm="git merge"
+alias gp="git pull"
+alias gr="git reset"
+alias gs="git status"
+
+# Python
+# We set UV_GLOBAL to tell startup scripts that we're not in a repo specific env.
+alias nb="UV_GLOBAL=1 jupyter lab"
+alias py="UV_GLOBAL=1 ipython"
+alias uvnb="uv run jupyter lab"
+alias uvpy="uv run ipython"
 alias uvr="uv run"
-alias py="uv run python"
 
 # Function to lazy load slow running init scripts.
 lazy_load() {
