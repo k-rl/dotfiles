@@ -83,3 +83,8 @@ cargo install --locked typst-cli
 cargo install espup esp-generate espflash probe-rs-tools --locked
 espup install
 rm "$HOME/export-esp.sh"
+
+# Install tmux package manager.
+TPM_DIR="$HOME/.config/tmux/plugins/tpm"
+rm -rf "$TPM_DIR"
+git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
