@@ -1,4 +1,6 @@
 export ZSH="$HOME/.local/bin/oh-my-zsh"
+export ZDOTDIR="$HOME/.config/zsh"
+export HISTFILE="$HOME/.local/state/zsh/history"
 ZSH_THEME="catppuccin"
 # Auto-update oh my zsh
 zstyle ':omz:update' mode auto
@@ -12,7 +14,6 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 plugins=(git vi-mode)
 
 source $ZSH/oh-my-zsh.sh
-source $HOME/.config/secrets.sh
 
 # Aliases
 alias clang=clang-20
@@ -63,6 +64,12 @@ export PATH="$HOME/.local/bin/nvim/bin:$PATH"
 
 # Git config location.
 export GIT_CONFIG_GLOBAL="$HOME/.config/gitconfig"
+
+# Make sure less doesn't create a hist file in home.
+export LESSHISTFILE=-
+
+# Set location of  wgetrc file.
+export WGETRC="$HOME/.config/wget/wgetrc"
 
 # Secrets
 export ANTHROPIC_API_KEY="{{ (bitwarden "item" "anthropic_key").notes }}"
