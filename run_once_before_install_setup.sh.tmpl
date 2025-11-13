@@ -78,7 +78,8 @@ export CARGO_HOME={{ .bin_dir }}/cargo
 curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | bash -s -- -y
 
 # Install rust tools.
+cargo install --locked typst-cli
 # Embedded development tools.
-cargo install espup esp-generate espflash probe-rs --locked
+cargo install espup esp-generate espflash probe-rs-tools --locked
 espup install
 rm "$HOME/export-esp.sh"
