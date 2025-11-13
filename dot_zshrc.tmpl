@@ -56,3 +56,9 @@ export PATH="$HOME/.local/bin/nvim/bin:$PATH"
 
 # Git config location.
 export GIT_CONFIG_GLOBAL="$HOME/.config/gitconfig"
+
+# Secrets
+export ANTHROPIC_API_KEY={{ (bitwarden "item" "anthropic_key").notes }}
+export OPENAI_API_KEY={{ (bitwarden "item" "openai_key").notes }}
+export UV_PUBLISH_TOKEN={{ (bitwarden "item" "uv_key").notes }}
+
