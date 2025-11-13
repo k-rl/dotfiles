@@ -56,4 +56,3 @@ export PATH="$HOME/.local/bin/nvim/bin:$PATH"
 
 # Git config location.
 export GIT_CONFIG_GLOBAL="$HOME/.config/gitconfig"
-
