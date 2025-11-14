@@ -50,6 +50,11 @@ alias tl="tmux ls"
 alias tn="tmux new -s"
 alias tr="tmux rename -t"
 
+# Vim
+alias v=nvim
+alias vi=nvim
+alias vim=nvim
+
 # Function to lazy load slow running init scripts.
 lazy_load() {
     local init=$argv[-1]
@@ -96,7 +101,6 @@ lazy_load nvm "source $NVM_DIR/nvm.sh; source $NVM_DIR/bash_completion"
 export NODE_REPL_HISTORY="$HOME/.local/state/node/repl_history"
 
 # Vim init.
-alias vim=nvim
 export EDITOR='nvim'
 export PATH="$HOME/.local/bin/nvim/bin:$PATH"
 
