@@ -45,6 +45,7 @@ alias uvr="uv run"
 # Tmux
 alias t="tmux"
 alias ta="tmux attach -t"
+alias tk="tmux kill-session -t"
 alias tl="tmux ls"
 alias tn="tmux new -s"
 alias tr="tmux rename -t"
@@ -68,6 +69,11 @@ lazy_load() {
 
 # Add local bin to path.
 export PATH="$HOME/.local/bin:$PATH"
+
+# Go init.
+export PATH="$HOME/.local/bin/go/bin:$PATH"
+export GOBIN="$HOME/.local/bin"
+export GOPATH="$HOME/.cache/go"
 
 # Python init.
 export IPYTHONDIR="$HOME/.config/ipython"

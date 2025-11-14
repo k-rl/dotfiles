@@ -13,6 +13,7 @@
     sudo apt install -y zip
     sudo apt install -y zsh
     sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+    wget -O go.tar.gz https://go.dev/dl/go1.25.4.linux-amd64.tar.gz
     wget -O nvim.tar.gz https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
 {{ else if eq .chezmoi.os "darwin" -}}
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
@@ -21,6 +22,7 @@
     brew install tmate
     brew install tmux
     brew install wget
+    wget -O go.tar.gz https://go.dev/dl/go1.25.4.darwin-amd64.tar.gz
     wget -O nvim.tar.gz https://github.com/neovim/neovim/releases/latest/download/nvim-macos-arm64.tar.gz
 {{ end -}}
 
@@ -34,10 +36,30 @@ mv nvim-* $VIM_DIR
 # Install ohmyzsh.
 sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --keep-zshrc --unattended"
 
+# Install go.
+GO_DIR={{ .bin_dir }}/go
+rm -rf $GO_DIR
+tar xzvf go.tar.gz
+rm go.tar.gz
+mv go $GO_DIR
+
 # Install uv (python).
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Install a global python environment.
+# Install node.
+NVM_DIR= {{ .bin_dir}}/nvm
+mkdir -p $NVM_DIR
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+source "$NVM_DIR/nvm.sh"
+nvm install 22
+
+# Install rust.
+export RUSTUP_HOME={{ .bin_dir }}/rustup
+export CARGO_HOME={{ .bin_dir }}/cargo
+curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | bash -s -- -y
+
+#=====Tools=====#
+# Global python environment.
 uv tool install jupyter-core \
   --with-executables-from ipython \
   --with jupyterlab \
@@ -53,40 +75,35 @@ uv tool install jupyter-core \
   --with xarray \
   --with zarr
 
-# Devtools
+# Python devtools.
 uv tool install pre-commit@latest --with pre-commit-uv
 uv tool install ruff@latest
 
-# Install node.
-NVM_DIR= {{ .bin_dir}}/nvm
-mkdir -p $NVM_DIR
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-\. "$NVM_DIR/nvm.sh"
-nvm install 22
-# Install node tools.
-npm install -g @anthropic-ai/claude-code
-npm install -g @bitwarden/cli
-npm install -g @openai/codex
-npm install -g @google/gemini-cli
-
-# Sync bitwarden.
-bw sync
-
-# Install rust.
-export RUSTUP_HOME={{ .bin_dir }}/rustup
-export CARGO_HOME={{ .bin_dir }}/cargo
-curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | bash -s -- -y
-
-# Install rust tools.
+# Typst.
 cargo install --locked typst-cli
-# Embedded development tools.
+
+# Hugo.
+export GOBIN={{ .bin_dir }}
+export GOPATH="$HOME/.cache/go"
+$GO_DIR/bin/go install github.com/gohugoio/hugo@latest
+
+# Embedded development.
 cargo install espup esp-generate espflash probe-rs-tools --locked
 espup install
 rm "$HOME/export-esp.sh"
 
-# Install tmux package manager.
+# AI Assistants.
+npm install -g @anthropic-ai/claude-code
+npm install -g @openai/codex
+npm install -g @google/gemini-cli
+
+# Tmux plugins.
 TMUX_PLUGINS_DIR="$HOME/.config/tmux/plugins"
 rm -rf TMUX_PLUGINS_DIR
 git clone -b latest https://github.com/catppuccin/tmux.git "$TMUX_PLUGINS_DIR/catppuccin/tmux"
 git clone https://github.com/tmux-plugins/tmux-battery.git "$TMUX_PLUGINS_DIR/tmux-plugins/tmux-battery"
 git clone https://github.com/tmux-plugins/tmux-cpu.git "$TMUX_PLUGINS_DIR/tmux-plugins/tmux-cpu"
+
+# Bitwarden.
+npm install -g @bitwarden/cli
+bw sync
